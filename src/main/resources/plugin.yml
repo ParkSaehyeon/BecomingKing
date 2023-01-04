@@ -1,0 +1,10 @@
+name: BecomingKing
+version: '${project.version}'
+main: rebert.saehyeon.becomingking.BecomingKing
+api-version: 1.16
+authors: [ Saehyeon ]
+description: 리버트 왕이 될 자 컨텐츠 시스템
+softdepend:
+  - SaehyeonLib
+commands:
+  king:
