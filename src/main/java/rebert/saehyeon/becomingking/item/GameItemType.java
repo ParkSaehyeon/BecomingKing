@@ -7,10 +7,5 @@ public enum GameItemType {
     SPEED,
     RANDOM_TP,
     SWORD,
-    SHOP_TIME_STOP,
-    SHOP_ANNOUNCE_LOCATION,
-    SHOP_SPEED,
-    SHOP_RANDOM_TP,
-    SHOP_SWORD,
     TIME_STOP
 }

@@ -4,6 +4,7 @@ import me.saehyeon.saehyeonlib.role.Role;
 import me.saehyeon.saehyeonlib.util.BukkitTaskf;
 import me.saehyeon.saehyeonlib.util.Playerf;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -100,7 +101,7 @@ public class onDeath implements Listener {
         // 어떤 조건에도 부합하지 않음 -> 사람 잘못 죽임.
 
         // 10 냥 있는지 확인
-        if(attacker.getInventory().contains(Money.getItemStack(10))) {
+        if(attacker.getInventory().contains(Material.GOLD_NUGGET,10)) {
 
             // 10냥 없애기
             Money.remove(attacker, 10);

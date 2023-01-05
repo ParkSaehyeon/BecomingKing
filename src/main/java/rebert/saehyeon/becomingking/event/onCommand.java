@@ -1,6 +1,7 @@
 package rebert.saehyeon.becomingking.event;
 
 import me.saehyeon.saehyeonlib.role.Role;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,6 +26,10 @@ public class onCommand implements CommandExecutor {
 
                 case "money":
                     ((Player)sender).getInventory().addItem(Money.getItemStack(Integer.parseInt(args[1])));
+                    break;
+
+                case "out":
+                    BecomingKing.out(Bukkit.getPlayer(args[1]));
                     break;
             }
         }

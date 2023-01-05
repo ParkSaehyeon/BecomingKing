@@ -8,8 +8,7 @@ import me.saehyeon.saehyeonlib.util.BukkitTaskf;
 import me.saehyeon.saehyeonlib.util.Itemf;
 import me.saehyeon.saehyeonlib.util.Playerf;
 import me.saehyeon.saehyeonlib.util.Stringf;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +23,9 @@ import rebert.saehyeon.becomingking.BecomingKing;
 import rebert.saehyeon.becomingking.item.GameItem;
 import rebert.saehyeon.becomingking.item.GameItemType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class onClick implements Listener {
     @EventHandler
@@ -35,11 +36,40 @@ public class onClick implements Listener {
 
         if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
-            switch (Itemf.getDisplayName(item)) {
+            String toolName = Itemf.getDisplayName(item);
 
-                case "§l시간 정지":
+            switch (ChatColor.stripColor(toolName)) {
+
+                case "랜덤 이동권":
+
+                    Playerf.removeHandItem(p,1);
+
+                    // 사용자를 제외한 랜덤한 한 사람에게 TP하기
+                    ArrayList<Player> players = new ArrayList<>( Bukkit.getOnlinePlayers() );
+                    players.removeIf(_p -> _p.getGameMode() == GameMode.SPECTATOR || _p.equals(p));
+
+                    Player target = players.get(new Random().nextInt(players.size()-1));
+                    p.teleport(target);
+
+                    p.sendMessage("§7"+target.getName()+"§f에게로 이동했습니다.");
+
+                    break;
+
+                case "전력질주":
+
+                    Playerf.removeHandItem(p,1);
+
+                    p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.MASTER,1,1.5f);
+
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,20*5,2,false,false));
+
+                    break;
+
+                case "시간정지":
 
                     // 한 번 쓰면 사라지기
+                    p.getInventory().remove(item);
+
                     p.getInventory().remove(Playerf.getMainHand(p));
 
                     // 모두를 정지시키기
@@ -56,7 +86,7 @@ public class onClick implements Listener {
 
                     break;
 
-                case "§l선비찾기":
+                case "선비찾기":
 
                     // 선비의 좌표를 알려기
                     p.sendMessage("\n현재 선비의 위치는 다음과 같습니다: ");
@@ -67,7 +97,7 @@ public class onClick implements Listener {
 
                     break;
 
-                case "§l투명":
+                case "투명":
 
                     if (!CoolTime.contains(p, "item.invisible")) {
 

@@ -58,6 +58,7 @@ public final class BecomingKing extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new onClick(), this);
         Bukkit.getPluginManager().registerEvents(new onMove(), this);
         Bukkit.getPluginManager().registerEvents(new other(), this);
+        Bukkit.getPluginManager().registerEvents(new onDamage(), this);
 
         Bukkit.getPluginCommand("king").setExecutor(new onCommand());
 
@@ -78,13 +79,17 @@ public final class BecomingKing extends JavaPlugin {
         Shop shop = new Shop("king","상점");
         shop.addNPCName("§l상인");
 
-        ItemStack slot1 = GameItem.get(GameItemType.SHOP_ANNOUNCE_LOCATION);
+        ItemStack slot1 = GameItem.get(GameItemType.ANNOUNCE_LOCATION);
+        Itemf.addLore(slot1, "", "§f  〉§610냥§f을 소비하여 구매합니다.", "");
 
-        ItemStack slot2 = GameItem.get(GameItemType.SHOP_SPEED);
+        ItemStack slot2 = GameItem.get(GameItemType.SPEED);
+        Itemf.addLore(slot2, "","§f  〉§615냥§f을 소비하여 구매합니다.","");
 
-        ItemStack slot3 = GameItem.get(GameItemType.SHOP_RANDOM_TP);
+        ItemStack slot3 = GameItem.get(GameItemType.RANDOM_TP);
+        Itemf.addLore(slot3, "","§f  〉§620냥§f을 소비하여 구매합니다.","");
 
-        ItemStack slot4 = GameItem.get(GameItemType.SHOP_SWORD);
+        ItemStack slot4 = GameItem.get(GameItemType.SWORD);
+        Itemf.addLore(slot4, "","§f  〉§620냥§f을 소비하여 구매합니다.","");
 
         shop.addGUIItem(slot1,10);
         shop.addGUIItem(slot2,12);
@@ -135,17 +140,6 @@ public final class BecomingKing extends JavaPlugin {
                     // 속도 기본으로 설정
                     p.setWalkSpeed(0.2f);
 
-                    // 기본템 지급 (천민: 철 검,
-                    if(Role.getByPlayer(p).getName().equals("cheonmin")) {
-
-                        p.getInventory().addItem( Itemf.createItemStack(Material.IRON_SWORD,1,"§l민초의 난",null) );
-
-                    } else {
-
-                        p.getInventory().addItem( Itemf.createItemStack(Material.STONE_SWORD,1,"§l단단한 검",Arrays.asList("","§7§o돌로 만들어진, 간단한 돌 검입니다.","")) );
-
-                    }
-
                 }
 
             });
@@ -156,7 +150,8 @@ public final class BecomingKing extends JavaPlugin {
     public static void Stop(Role winRole) {
 
         // 타이머 종료
-        Timer.findByName("king").stop();
+        if(Timer.findByName("king") != null)
+            Timer.findByName("king").stop();
 
         // 왕이 이김
         switch (winRole.getName()) {
@@ -185,16 +180,25 @@ public final class BecomingKing extends JavaPlugin {
 
     public static void checkKingWin() {
 
-        AtomicInteger i = new AtomicInteger(0);
+        Player winner = null;
 
-        Bukkit.getOnlinePlayers().forEach(p -> {
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            if(p.getGameMode() != GameMode.SPECTATOR) {
 
-            if(p.getGameMode() != GameMode.SPECTATOR)
-                i.getAndIncrement();
+                if(winner != null)
+                    return;
 
-        });
+                winner = p;
 
+            }
+        }
+
+        // 마지막까지 남은 한 사람을 왕으로 추대
+        Role.getByName("king").add(winner);
+
+        // 왕이 이긴 게임으로 종료
         Stop(Role.getByName("king"));
+
     }
     public static boolean canKingKillEveryone() {
 
@@ -212,7 +216,53 @@ public final class BecomingKing extends JavaPlugin {
     public static void out(Player player) {
 
         player.setGameMode(GameMode.SPECTATOR);
-        player.sendTitle("","당신은 탈락했습니다.",0,20,15);
+        player.sendTitle("","당신은 탈락했습니다.",0,40,15);
+
+        Role playerRole = Role.getByPlayer(player);
+
+        playerRole.remove(player);
+
+        checkKingWin();
+
+        // 이 역할이 천민이 아니라면 탈락자의 역할의 아래 단계의 역할을 가진 플레이어 중
+        // 각 역할에서 랜덤으로 한 명이 다음 역할로 올라가기
+
+        if(!playerRole.getName().equals("cheonmin") && !playerRole.getName().equals("nobi")) {
+
+            Bukkit.broadcastMessage("");
+            Bukkit.broadcastMessage(playerRole.getPrefix().replace(" ", "")+"§f의 자리가 공백이 됨에 따라 직급 변동이 발생했습니다.");
+
+            ArrayList<Role> roles = Role.getRoles();
+            roles.removeIf(role -> (int) role.getState("power") >= (int) playerRole.getState("power"));
+            roles.removeIf(role -> role.getName().equals("nobi"));
+
+            boolean isChanged = false;
+
+            for (Role role : roles) {
+
+                if(role.getPlayers().isEmpty())
+                    continue;
+
+                isChanged = true;
+                int randomIndex = role.getPlayers().size() > 1 ? new Random().nextInt(role.getPlayers().size() - 1) : 0;
+
+                Player target   = new ArrayList<>(role.getPlayers()).get(randomIndex);
+                Role oldRole    = Role.getByPlayer(target);
+                Role nextRole   = Role.getByState("power", (int) role.getState("power") + 1).get(0);
+
+                nextRole.add(target);
+
+                Bukkit.broadcastMessage(" 〉 §f"+target.getName()+": "+oldRole.getPrefix()+"§f→ "+nextRole.getPrefix());
+
+            }
+
+            if(!isChanged) {
+                Bukkit.broadcastMessage("§7변동 사항이 없습니다.");
+            }
+
+            Bukkit.broadcastMessage("");
+
+        }
 
     }
 

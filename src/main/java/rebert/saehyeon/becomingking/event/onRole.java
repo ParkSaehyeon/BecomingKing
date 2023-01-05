@@ -23,20 +23,28 @@ public class onRole implements SaehyeonLibListener {
         Role role   = e.getRole();
         Player p    = e.getPlayer();
 
-        p.sendTitle("","당신은 이제부터 "+role.getPrefix()+"§f입니다.",0,20,15);
+        p.sendTitle("","당신은 이제부터 "+role.getPrefix()+"§f입니다.",0,40,15);
 
         // 쉘커 껍대기 없애기
-        p.getInventory().remove(Material.SHULKER_SHELL);
+        p.getInventory().remove(Material.PINK_DYE);
+        p.getInventory().remove(Material.GRAY_DYE);
+        p.getInventory().remove(Material.CLOCK);
 
         // 신속 버프 없애기
         p.removePotionEffect(PotionEffectType.SPEED);
 
-        Bukkit.broadcastMessage("역할이 변경됨! "+p.getName()+"의 역할이 "+role.getName()+"(으)로 변경됨.");
+        p.getInventory().remove(Material.STONE_SWORD);
+        p.getInventory().addItem( Itemf.createItemStack(Material.STONE_SWORD,1,"§l단단한 검",Arrays.asList("","§7§o돌로 만들어진, 간단한 돌 검입니다.","")) );
+
+        //Bukkit.broadcastMessage("역할이 변경됨! "+p.getName()+"의 역할이 "+role.getPrefix()+"§f(으)로 변경됨.");
 
         switch (role.getName()) {
 
             // 왕 바뀜 -> 모든 노비 해방
             case "king":
+
+                // 시간정지 아이템 지급
+                p.getInventory().addItem(GameItem.get(GameItemType.TIME_STOP));
 
                 Role nobi = Role.getByName("nobi");
                 Role cheonmin = Role.getByName("cheonmin");
@@ -46,7 +54,7 @@ public class onRole implements SaehyeonLibListener {
                     // 노비들은 천민으로
                     new ArrayList<>( nobi.getPlayers() ).forEach(cheonmin::add);
 
-                    Playerf.sendTitleAll("§l정권교체","모든 노비가 해방되었습니다.",0,20,15);
+                    Playerf.sendTitleAll("§l정권교체","모든 노비가 해방되었습니다.",0,40,15);
 
                 }
 
@@ -65,6 +73,14 @@ public class onRole implements SaehyeonLibListener {
                 // 아이템 주기
                 p.getInventory().addItem(GameItem.get(GameItemType.PYUNGMIN_FIND_SUNBI));
                 p.getInventory().addItem(GameItem.get(GameItemType.PYUNGMIN_INVISIBLE));
+
+                break;
+
+            // 천민한테는 철칼 쥐어주기
+            case "cheonmin":
+
+                p.getInventory().remove(Material.STONE_SWORD);
+                p.getInventory().addItem( Itemf.createItemStack(Material.IRON_SWORD,1,"§l민초의 난",null) );
 
                 break;
         }
