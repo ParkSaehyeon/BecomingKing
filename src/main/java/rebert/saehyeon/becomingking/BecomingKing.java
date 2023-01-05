@@ -2,6 +2,7 @@ package rebert.saehyeon.becomingking;
 
 import me.saehyeon.saehyeonlib.main.SaehyeonLibEvent;
 import me.saehyeon.saehyeonlib.region.Region;
+import me.saehyeon.saehyeonlib.role.ExPlayer;
 import me.saehyeon.saehyeonlib.role.Role;
 import me.saehyeon.saehyeonlib.shop.Shop;
 import me.saehyeon.saehyeonlib.timer.Timer;
@@ -43,7 +44,7 @@ public final class BecomingKing extends JavaPlugin {
         new Location(WORLD,-15,65,263),
         new Location(WORLD,21,64,263),
         new Location(WORLD,81,67,291),
-        new Location(WORLD,183,63,295),
+        new Location(WORLD,183,64,295),
         new Location(WORLD,199,64,241)
     ));
 
@@ -101,6 +102,9 @@ public final class BecomingKing extends JavaPlugin {
         // 양반한테 옆전 주는 타이머 시작
         GameTimer.StartYangbanTimer();
 
+        // 역할 엑션바 띄우는 타이머 시작
+        GameTimer.StartRoleActionbarTimer();
+
     }
 
     @Override
@@ -112,18 +116,15 @@ public final class BecomingKing extends JavaPlugin {
 
         Timer.countDown(3, () -> {
 
-            // 역할 랜덤 분배
-            Role.applyRandomAll(Role.getByName("nobi"));
-
             // 게임 시간 제한 타이머 시작
             GameTimer.Start();
 
             // 바닥에 옆전 떨구기 시작 TODO 여기 지역 주석 풀어야함
-            //Region.findByName("king").getDropItem().StartDrop(true);
+            Region.findByName("king").getDropItem().StartDrop(true);
 
             Bukkit.getOnlinePlayers().forEach(p -> {
 
-                if(p.getGameMode() != GameMode.SPECTATOR) {
+                if(!ExPlayer.contains(p)) {
 
                     // 랜덤 좌표로 TP
                     respawn(p);
@@ -140,9 +141,15 @@ public final class BecomingKing extends JavaPlugin {
                     // 속도 기본으로 설정
                     p.setWalkSpeed(0.2f);
 
+                    // 게임모드 설정
+                    p.setGameMode(GameMode.ADVENTURE);
+
                 }
 
             });
+
+            // 역할 랜덤 분배
+            Role.applyRandomAll(Role.getByName("nobi"));
 
         });
     }
@@ -151,7 +158,10 @@ public final class BecomingKing extends JavaPlugin {
 
         // 타이머 종료
         if(Timer.findByName("king") != null)
-            Timer.findByName("king").stop();
+            Timer.findByName("king").setPause(true);
+
+        // 소리 내기
+        Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(),Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.MASTER,1,1));
 
         // 왕이 이김
         switch (winRole.getName()) {
@@ -166,10 +176,11 @@ public final class BecomingKing extends JavaPlugin {
 
                 // 천민 출력
                 Bukkit.broadcastMessage("");
-                Bukkit.broadcastMessage("§c   〈 혁명을 이룩한 노비들 〉");
+                Bukkit.broadcastMessage("§c§l   〈 혁명을 이룩한 노비들 〉");
+                Bukkit.broadcastMessage("");
 
                 winRole.getPlayers().forEach(p -> {
-                    Bukkit.broadcastMessage("§l - "+p.getName());
+                    Bukkit.broadcastMessage("§f - "+p.getName());
                 });
 
                 Bukkit.broadcastMessage("");
@@ -269,6 +280,8 @@ public final class BecomingKing extends JavaPlugin {
     public static void gotoWaitRoom(Player player) {
 
         player.sendMessage("당신은 §730초§f동안 §7신분 교체의 방§f에 갇히게 됩니다.");
+
+        player.teleport(WaitingRoomLoc);
 
         BukkitTaskf.wait(() -> respawn(player),20*30);
     }

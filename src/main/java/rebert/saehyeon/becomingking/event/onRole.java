@@ -7,6 +7,8 @@ import me.saehyeon.saehyeonlib.util.Itemf;
 import me.saehyeon.saehyeonlib.util.Playerf;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -24,6 +26,7 @@ public class onRole implements SaehyeonLibListener {
         Player p    = e.getPlayer();
 
         p.sendTitle("","당신은 이제부터 "+role.getPrefix()+"§f입니다.",0,40,15);
+        p.sendActionBar("당신은 "+role.getPrefix().replace(" ","")+"§f입니다.");
 
         // 쉘커 껍대기 없애기
         p.getInventory().remove(Material.PINK_DYE);
@@ -35,6 +38,8 @@ public class onRole implements SaehyeonLibListener {
 
         p.getInventory().remove(Material.STONE_SWORD);
         p.getInventory().addItem( Itemf.createItemStack(Material.STONE_SWORD,1,"§l단단한 검",Arrays.asList("","§7§o돌로 만들어진, 간단한 돌 검입니다.","")) );
+
+        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.MASTER,1,2);
 
         //Bukkit.broadcastMessage("역할이 변경됨! "+p.getName()+"의 역할이 "+role.getPrefix()+"§f(으)로 변경됨.");
 

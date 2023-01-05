@@ -5,9 +5,7 @@ import me.saehyeon.saehyeonlib.main.SaehyeonLibListener;
 import me.saehyeon.saehyeonlib.shop.event.ShopClickItemEvent;
 import me.saehyeon.saehyeonlib.util.Itemf;
 import me.saehyeon.saehyeonlib.util.Stringf;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import rebert.saehyeon.becomingking.item.GameItem;
 import rebert.saehyeon.becomingking.item.GameItemType;
@@ -27,11 +25,8 @@ public class onShop implements SaehyeonLibListener {
                 cost = 15;
                 break;
 
-            case "§f§l두 방 검":
-                cost = 20;
-                break;
-
             case "§f§l랜덤 이동권":
+            case "§f§l두 방 검":
                 cost = 20;
                 break;
 
@@ -45,6 +40,8 @@ public class onShop implements SaehyeonLibListener {
 
         // 돈이 있는지 확인 -> 있으면 상품 주기
         if(p.getInventory().contains(Material.GOLD_NUGGET, cost)) {
+
+            p.playSound(p.getLocation(), Sound.BLOCK_CHAIN_PLACE, SoundCategory.MASTER,1,1.4f);
 
             Money.remove(p, cost);
             p.sendMessage("당신은 "+itemName+"§f(을)를 구매했습니다.");

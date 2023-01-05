@@ -1,9 +1,12 @@
 package rebert.saehyeon.becomingking.event;
 
+import me.saehyeon.saehyeonlib.main.SaehyeonLib;
 import me.saehyeon.saehyeonlib.role.Role;
+import me.saehyeon.saehyeonlib.state.PlayerState;
 import me.saehyeon.saehyeonlib.util.BukkitTaskf;
 import me.saehyeon.saehyeonlib.util.Playerf;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,14 +20,28 @@ public class onDeath implements Listener {
 
     @EventHandler
     void onRespawn(PlayerRespawnEvent e) {
-        BukkitTaskf.wait(() -> BecomingKing.respawn(e.getPlayer()),1);
-    }
+        Player p = e.getPlayer();
 
+        if(p.getGameMode() == GameMode.SPECTATOR)
+            return;
+
+        BukkitTaskf.wait(() -> {
+
+            if(PlayerState.getBoolean(p,"waitingRoomRespawn")) {
+                BecomingKing.gotoWaitRoom(p);
+            } else {
+                BecomingKing.respawn(p);
+            }
+
+        },1);
+    }
     @EventHandler
     void onDeath(PlayerDeathEvent e) {
 
         Player victim   = e.getEntity();
         Player attacker = victim.getKiller();
+
+        PlayerState.set(victim, "waitingRoomRespawn", false);
 
         // 공격자가 없음
         if(attacker == null) {
@@ -48,9 +65,9 @@ public class onDeath implements Listener {
             attackerRole.add(victim);
             victimRole.add(attacker);
 
-            BecomingKing.gotoWaitRoom(victim);
-
             e.setDeathMessage("§7"+attacker.getName()+"§f(이)가 §7"+victim.getName()+"§f(을)를 죽였습니다.");
+
+            PlayerState.set(victim, "waitingRoomRespawn", true);
 
             return;
 
@@ -65,9 +82,9 @@ public class onDeath implements Listener {
                 // 천민 -> 노비로 강등
                 Role.getByName("nobi").add(victim);
 
-                BecomingKing.gotoWaitRoom(victim);
-
                 e.setDeathMessage("§7"+attacker.getName()+"§f(이)가 §7"+victim.getName()+"§f(을)를 자신의 노비로 만들었습니다!");
+
+                PlayerState.set(victim, "waitingRoomRespawn", false);
 
                 // 천민 다 죽었으면, 다 죽었다고 알리기
                 if(BecomingKing.canKingKillEveryone())
@@ -95,6 +112,7 @@ public class onDeath implements Listener {
         // 공격자: 노비, 피해자: 왕
         if(attackerRole.getName().equals("nobi") && victimRole.getName().equals("king")) {
             BecomingKing.Stop(Role.getByName("nobi"));
+            e.setDeathMessage("§f§l"+attacker.getName()+"§c§l(이)가 혁명에 성공했습니다!");
             return;
         }
 
