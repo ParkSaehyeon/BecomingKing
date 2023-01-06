@@ -19,6 +19,14 @@ public class onMove implements Listener {
             if(role != null && !role.getName().equals("king") && e.getPlayer().getGameMode() != GameMode.SPECTATOR)
                 e.setCancelled(true);
 
+            return;
+        }
+
+        // 또는 혁명 준비장소로 이동되어야하는 위치인지 확인
+        if(!e.getFrom().toBlockLocation().equals(e.getTo().toBlockLocation())) {
+
+            BecomingKing.checkAndGotoRevolution(e.getPlayer());
+
         }
 
     }

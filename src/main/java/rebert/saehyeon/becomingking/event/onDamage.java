@@ -1,6 +1,7 @@
 package rebert.saehyeon.becomingking.event;
 
 import me.saehyeon.saehyeonlib.region.Region;
+import me.saehyeon.saehyeonlib.role.Role;
 import me.saehyeon.saehyeonlib.util.Locationf;
 import me.saehyeon.saehyeonlib.util.Playerf;
 import me.saehyeon.saehyeonlib.util.Stringf;
@@ -20,6 +21,7 @@ public class onDamage implements Listener {
     void onDamage(EntityDamageByEntityEvent e) {
         if(e.getDamager() instanceof Player && e.getEntity() instanceof Player) {
             Player attacker = (Player)e.getDamager();
+            Player victim   = (Player)e.getEntity();
 
             // 만약 NO pvp 존에 있으면 데미지 X
             Region noPVP = Region.findByName("king-nopvp");
@@ -29,6 +31,13 @@ public class onDamage implements Listener {
                 e.setCancelled(true);
                 attacker.sendMessage("§c피해자가 PVP 금지 지역에 있습니다.");
                 return;
+            }
+
+            Role victimRole = Role.getByPlayer(victim);
+
+            // 왕이 다이아몬드 검으로 공격받으면 15데미지
+            if(victimRole != null && victimRole.getName().equals("king") && Playerf.getMainHand(attacker).getType() == Material.DIAMOND_SWORD) {
+                e.setDamage(15);
             }
 
             // 두 방 검으로 공격자가 공격했다면 내구도 감소

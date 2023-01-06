@@ -8,8 +8,10 @@ import me.saehyeon.saehyeonlib.shop.Shop;
 import me.saehyeon.saehyeonlib.timer.Timer;
 import me.saehyeon.saehyeonlib.util.BukkitTaskf;
 import me.saehyeon.saehyeonlib.util.Itemf;
+import me.saehyeon.saehyeonlib.util.Locationf;
 import me.saehyeon.saehyeonlib.util.Playerf;
 import org.bukkit.*;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,6 +31,17 @@ public final class BecomingKing extends JavaPlugin {
     public static boolean isTimeStop = false;
     public static World WORLD = Bukkit.getWorld("world");
     public static Location WaitingRoomLoc = new Location(WORLD,-65,81,207);
+
+    // 혁명 준비장소 태어나는 위치
+    public static Location RevolutionLoc = new Location(WORLD, 15,66, 369);
+
+    // 혁명 준비장소에서 다시 돌아가는 거
+    public static Location RevolutionBackLoc = new Location(WORLD, 14,66,373);
+
+    // 혁명 준비장소로 이동하는 위치
+    public static Location RevolutionWarpLoc = null;
+    public static Location RevolutionSwordChestLoc = new Location(WORLD, 23,56,421);
+
     public static ArrayList<Location> SpawnLoc = new ArrayList<>(Arrays.asList(
         new Location(WORLD,-36,64,201),
         new Location(WORLD,59,65,214),
@@ -59,7 +72,8 @@ public final class BecomingKing extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new onClick(), this);
         Bukkit.getPluginManager().registerEvents(new onMove(), this);
         Bukkit.getPluginManager().registerEvents(new other(), this);
-        Bukkit.getPluginManager().registerEvents(new onDamage(), this);
+        Bukkit.getPluginManager().registerEvents(new other(), this);
+        Bukkit.getPluginManager().registerEvents(new onGUI(), this);
 
         Bukkit.getPluginCommand("king").setExecutor(new onCommand());
 
@@ -152,8 +166,12 @@ public final class BecomingKing extends JavaPlugin {
 
             });
 
+            // 혁명가의 검 리젠
+            regenRevolutionSword();
+
             // 역할 랜덤 분배
             Role.applyRandomAll(Role.getByName("nobi"));
+
 
         });
     }
@@ -242,6 +260,10 @@ public final class BecomingKing extends JavaPlugin {
         // 이 역할이 천민이 아니라면 탈락자의 역할의 아래 단계의 역할을 가진 플레이어 중
         // 각 역할에서 랜덤으로 한 명이 다음 역할로 올라가기
 
+        // 혁명가의 검을 들고 있는 사람이 탈락됨 -> 검 리젠
+        if(player.getInventory().contains(Material.DIAMOND_SWORD))
+            regenRevolutionSword();
+
         if(!playerRole.getName().equals("cheonmin") && !playerRole.getName().equals("nobi")) {
 
             Bukkit.broadcastMessage("");
@@ -288,5 +310,32 @@ public final class BecomingKing extends JavaPlugin {
         player.teleport(WaitingRoomLoc);
 
         BukkitTaskf.wait(() -> respawn(player),20*30);
+    }
+
+    // 혁명 준비 장소로 이동
+    public static void checkAndGotoRevolution(Player player) {
+        Role role = Role.getByPlayer(player);
+
+        if(role != null && !role.getName().equals("nobi"))
+            return;
+
+        if(player.getLocation().clone().add(0,-1,0).getBlock().getType() == Material.GOLD_BLOCK) {
+            player.teleport(RevolutionLoc);
+            player.sendTitle("","§c§l혁명 준비 장소§f에 도착했습니다.");
+        }
+
+        if(Locationf.equal(RevolutionBackLoc,player.getLocation().toBlockLocation())) {
+            player.teleport(new Location(WORLD, 58,93,340));
+            player.sendTitle("","§c§l혁명 준비 장소§f에서 나왔습니다.");
+        }
+    }
+
+    public static void regenRevolutionSword() {
+
+        Chest chest = (Chest)RevolutionSwordChestLoc.getBlock().getState();
+        chest.getInventory().clear();
+        chest.getInventory().setItem(13,GameItem.get(GameItemType.REVOLUTION_SWORD));
+
+
     }
 }

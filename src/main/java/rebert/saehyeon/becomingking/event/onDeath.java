@@ -5,9 +5,7 @@ import me.saehyeon.saehyeonlib.role.Role;
 import me.saehyeon.saehyeonlib.state.PlayerState;
 import me.saehyeon.saehyeonlib.util.BukkitTaskf;
 import me.saehyeon.saehyeonlib.util.Playerf;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -82,18 +80,34 @@ public class onDeath implements Listener {
                 // 천민 -> 노비로 강등
                 Role.getByName("nobi").add(victim);
 
+                String message = "";
+
                 // 공격자: 망치님, 피해자: 표영님
                 if(victim.getName().equals("Pyoyoung") && attacker.getName().equals("_H_A_M_M_E_R_")) {
-                    e.setDeathMessage("§7망치§f가 §7표영§f을 가졌습니다.");
-                } else {
-                    e.setDeathMessage("§7"+attacker.getName()+"§f(이)가 §7"+victim.getName()+"§f(을)를 자신의 노비로 만들었습니다!");
+                    message = "§7망치§f가 §7표영§f을 가졌습니다.";
+                }
+
+                else if(victim.getName().equals("Myuko0520") && attacker.getName().equals("dol_ta21")) {
+                    message = "§7돌타§f가 §7뮤코§f와 백년가약을 맺었습니다.";
+                }
+
+                else if(victim.getName().equals("choigugu") && attacker.getName().equals("NamJae_")) {
+                    message = "공격수인 §7남재§f가 수비수인 §7최구구§f를 이겼습니다.";
+                }
+
+                else {
+                    message = "§7"+attacker.getName()+"§f(이)가 §7"+victim.getName()+"§f(을)를 자신의 노비로 만들었습니다!";
                 }
 
                 PlayerState.set(victim, "waitingRoomRespawn", false);
 
+                e.setDeathMessage(message);
+
                 // 천민 다 죽었으면, 다 죽었다고 알리기
-                if(BecomingKing.canKingKillEveryone())
+                if(BecomingKing.canKingKillEveryone()) {
                     Playerf.sendTitleAll("§c§l폭군","왕은 이제 모두를 죽일 수 있어요.");
+                    Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, SoundCategory.MASTER,1,1));
+                }
 
                 return;
             }
@@ -104,11 +118,27 @@ public class onDeath implements Listener {
                 // 피해자 탈락
                 BecomingKing.out(victim);
 
+                String message = "";
+
                 if(victim.getName().equals("Pyoyoung") && attacker.getName().equals("_H_A_M_M_E_R_")) {
-                    e.setDeathMessage("마침내 §7표영§f은 §7망치§f로부터 벗어났습니다. (§7"+victim.getName()+"§f(이)가 탈락했습니다.)");
-                } else {
-                    e.setDeathMessage("§7"+attacker.getName()+"§f(이)가 §7"+victim.getName()+"§f(을)를 탈락시켰습니다!");
+                    message = "마침내 §7표영§f은 §7망치§f로부터 벗어났습니다.";
                 }
+
+                else if(victim.getName().equals("Myuko0520") && attacker.getName().equals("dol_ta21")) {
+                    message = "§7돌타§f가 §7뮤코§f와 이혼하기로 결정했습니다.";
+                }
+
+                else if(victim.getName().equals("choigugu") && attacker.getName().equals("NamJae_")) {
+                    message = "공격수인 §7남재§f가 수비수인 §7최구구§f를 먹었습니다.";
+                }
+
+                else {
+                    message = "§7"+attacker.getName()+"§f(이)가 §7"+victim.getName()+"§f(을)를 탈락시켰습니다!";
+                }
+
+                message += " (§7"+victim.getName()+"§f(이)가 탈락했습니다.)";
+
+                e.setDeathMessage(message);
 
                 return;
 

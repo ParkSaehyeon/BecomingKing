@@ -1,7 +1,9 @@
 package rebert.saehyeon.becomingking.event;
 
 import me.saehyeon.saehyeonlib.role.Role;
+import me.saehyeon.saehyeonlib.util.Stringf;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +19,6 @@ public class onCommand implements CommandExecutor {
             switch (args[0]) {
                 case "start":
                     BecomingKing.Start();
-
                     break;
 
                 case "stop":
@@ -30,6 +31,19 @@ public class onCommand implements CommandExecutor {
 
                 case "out":
                     BecomingKing.out(Bukkit.getPlayer(args[1]));
+                    break;
+
+                case "sword":
+                    BecomingKing.regenRevolutionSword();
+                    break;
+
+                case "revol-here":
+
+                    Location loc = ((Player) sender).getLocation().toBlockLocation();
+                    BecomingKing.RevolutionWarpLoc = loc;
+
+                    sender.sendMessage("혁명 준비 워프장소 설정: "+ Stringf.toLocationStr(loc));
+
                     break;
             }
         }

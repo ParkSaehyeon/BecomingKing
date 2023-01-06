@@ -8,5 +8,6 @@ public enum GameItemType {
     RANDOM_TP,
     SWORD,
     TIME_STOP,
-    HEAL
+    HEAL,
+    REVOLUTION_SWORD
 }

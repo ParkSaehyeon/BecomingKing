@@ -2,6 +2,7 @@ package rebert.saehyeon.becomingking.item;
 
 import me.saehyeon.saehyeonlib.util.Itemf;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -32,6 +33,15 @@ public class GameItem {
 
             case HEAL:
                 return Itemf.createItemStack(Material.LIGHT_GRAY_DYE,1,"§f§l회복",Arrays.asList("§7우클릭§f하여 모든 체력을 회복합니다. §71회용§f입니다."));
+
+            case REVOLUTION_SWORD:
+                ItemStack item = Itemf.createItemStack(Material.DIAMOND_SWORD,1,"§c§l혁명가의 검",Arrays.asList(
+                        "§c왕§f에게 한하여 15데미지를 입힙니다.","","§c§o\" 들어라 최후 결전, 투쟁의 외침을 \"","§c§o\" 민중이여 해방의 깃발 아래 서자 \"", "§c§o\" 역사의 참된 주인 승리를 위하여 \"","§c§o\" 참 자유 평등 그 길로 힘차게 나가자 \""
+                ));;
+
+                item.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+                return item;
 
         }
 
