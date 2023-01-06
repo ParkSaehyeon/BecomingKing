@@ -37,6 +37,8 @@ public class onRole implements SaehyeonLibListener {
         p.removePotionEffect(PotionEffectType.SPEED);
 
         p.getInventory().remove(Material.STONE_SWORD);
+        p.getInventory().remove(Material.IRON_SWORD);
+
         p.getInventory().addItem( Itemf.createItemStack(Material.STONE_SWORD,1,"§l단단한 검",Arrays.asList("","§7§o돌로 만들어진, 간단한 돌 검입니다.","")) );
 
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.MASTER,1,2);

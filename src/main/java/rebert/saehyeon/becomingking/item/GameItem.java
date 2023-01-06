@@ -30,6 +30,9 @@ public class GameItem {
             case TIME_STOP:
                 return Itemf.createItemStack(Material.CLOCK,1,"§f§l시간정지", Arrays.asList("§f왕을 제외한 모든 사람의 시간을 정지합니다."));
 
+            case HEAL:
+                return Itemf.createItemStack(Material.LIGHT_GRAY_DYE,1,"§f§l회복",Arrays.asList("§7우클릭§f하여 모든 체력을 회복합니다. §71회용§f입니다."));
+
         }
 
         return null;

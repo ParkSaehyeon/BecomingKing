@@ -18,7 +18,7 @@ public class GameTimer {
 
         BossBar bossBar = Bukkit.createBossBar("§f§l남은 시간 {h}:{m}:{s}", BarColor.WHITE, BarStyle.SOLID);
 
-        Timer.StartTimer("king",bossBar,3600);
+        Timer.StartTimer("king",bossBar,1800);
     }
 
     public static void StartYangbanTimer() {

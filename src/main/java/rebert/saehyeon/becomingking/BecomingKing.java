@@ -72,12 +72,12 @@ public final class BecomingKing extends JavaPlugin {
         Role.createRole("king","§e§l왕§f ",1).setState("power",5);
         Role.createRole("yangban","§6§l양반§f ",1).setState("power",4);
         Role.createRole("sunbi","§f§l선비§f ",1).setState("power",3);
-        Role.createRole("pyungmin","§7평민§f ",1).setState("power",2); // TODO 이거 필요 인원 다시 2명으로 바꾸기
+        Role.createRole("pyungmin","§7평민§f ",2).setState("power",2); // TODO 이거 필요 인원 다시 2명으로 바꾸기
         Role.createRole("cheonmin","§8천민§f ",0).setState("power",1);
         Role.createRole("nobi","§8노비 ",0).setState("power",0);
 
         // 상점 등록
-        Shop shop = new Shop("king","상점");
+        Shop shop = new Shop("king","상점",5);
         shop.addNPCName("§l상인");
 
         ItemStack slot1 = GameItem.get(GameItemType.ANNOUNCE_LOCATION);
@@ -92,10 +92,14 @@ public final class BecomingKing extends JavaPlugin {
         ItemStack slot4 = GameItem.get(GameItemType.SWORD);
         Itemf.addLore(slot4, "","§f  〉§620냥§f을 소비하여 구매합니다.","");
 
+        ItemStack slot5 = GameItem.get(GameItemType.HEAL);
+        Itemf.addLore(slot5, "","§f  〉§610냥§f을 소비하여 구매합니다.","");
+
         shop.addGUIItem(slot1,10);
         shop.addGUIItem(slot2,12);
         shop.addGUIItem(slot3,14);
         shop.addGUIItem(slot4,16);
+        shop.addGUIItem(slot5,28);
 
         shop.register();
 

@@ -1,7 +1,11 @@
 package rebert.saehyeon.becomingking.event;
 
+import me.saehyeon.saehyeonlib.region.Region;
+import me.saehyeon.saehyeonlib.util.Locationf;
 import me.saehyeon.saehyeonlib.util.Playerf;
+import me.saehyeon.saehyeonlib.util.Stringf;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,12 +21,20 @@ public class onDamage implements Listener {
         if(e.getDamager() instanceof Player && e.getEntity() instanceof Player) {
             Player attacker = (Player)e.getDamager();
 
+            // 만약 NO pvp 존에 있으면 데미지 X
+            Region noPVP = Region.findByName("king-nopvp");
+            Location[] pos = noPVP.getPosition();
+
+            if(Locationf.isWithin(e.getEntity().getLocation(),pos[0],pos[1])) {
+                e.setCancelled(true);
+                attacker.sendMessage("§c피해자가 PVP 금지 지역에 있습니다.");
+                return;
+            }
+
             // 두 방 검으로 공격자가 공격했다면 내구도 감소
             if(Playerf.getMainHand(attacker).getType() == Material.NETHERITE_SWORD) {
 
                 e.setDamage(new Random().nextInt(20)+1);
-
-                Bukkit.broadcastMessage(""+Playerf.getMainHand(attacker).getDurability());
 
                 if(Playerf.getMainHand(attacker).getDurability() == 1025) {
 

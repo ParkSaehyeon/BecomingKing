@@ -30,6 +30,7 @@ public class onShop implements SaehyeonLibListener {
                 cost = 20;
                 break;
 
+            case "§f§l회복":
             case "§f§l위치 공개":
                 cost = 10;
                 break;
@@ -77,6 +78,10 @@ public class onShop implements SaehyeonLibListener {
 
                 case "§f§l전력질주":
                     p.getInventory().addItem(GameItem.get(GameItemType.SPEED));
+                    break;
+
+                case "§f§l회복":
+                    p.getInventory().addItem(GameItem.get(GameItemType.HEAL));
                     break;
 
             }

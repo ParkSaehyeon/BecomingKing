@@ -13,8 +13,10 @@ public class onMove implements Listener {
 
         if(BecomingKing.isTimeStop) {
 
+            Role role = Role.getByPlayer(e.getPlayer());
+
             // 플레이어가 관전자이거나 또는 왕일 경우 시간 정지를 상쇄함
-            if(!Role.getByPlayer(e.getPlayer()).getName().equals("king") && e.getPlayer().getGameMode() != GameMode.SPECTATOR)
+            if(role != null && !role.getName().equals("king") && e.getPlayer().getGameMode() != GameMode.SPECTATOR)
                 e.setCancelled(true);
 
         }

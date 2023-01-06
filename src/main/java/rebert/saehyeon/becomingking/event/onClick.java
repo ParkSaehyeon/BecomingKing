@@ -40,6 +40,17 @@ public class onClick implements Listener {
 
             switch (ChatColor.stripColor(toolName)) {
 
+                case "회복":
+
+                    Playerf.removeHandItem(p,1);
+
+                    p.setHealth(20);
+
+                    p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.MASTER,1,1.5f);
+
+                    p.sendMessage("§a회복했습니다!");
+                    break;
+
                 case "랜덤 이동권":
 
                     Playerf.removeHandItem(p,1);

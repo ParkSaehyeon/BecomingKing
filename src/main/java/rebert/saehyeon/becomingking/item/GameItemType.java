@@ -7,5 +7,6 @@ public enum GameItemType {
     SPEED,
     RANDOM_TP,
     SWORD,
-    TIME_STOP
+    TIME_STOP,
+    HEAL
 }
