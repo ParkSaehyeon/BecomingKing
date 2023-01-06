@@ -74,6 +74,7 @@ public final class BecomingKing extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new other(), this);
         Bukkit.getPluginManager().registerEvents(new other(), this);
         Bukkit.getPluginManager().registerEvents(new onGUI(), this);
+        Bukkit.getPluginManager().registerEvents(new onDamage(), this);
 
         Bukkit.getPluginCommand("king").setExecutor(new onCommand());
 
@@ -122,6 +123,9 @@ public final class BecomingKing extends JavaPlugin {
 
         // 역할 엑션바 띄우는 타이머 시작
         GameTimer.StartRoleActionbarTimer();
+
+        // 노비 타이머 시작
+        GameTimer.StartRevolutionTimer();
 
     }
 

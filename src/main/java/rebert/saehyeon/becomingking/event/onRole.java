@@ -35,6 +35,7 @@ public class onRole implements SaehyeonLibListener {
 
         // 신속 버프 없애기
         p.removePotionEffect(PotionEffectType.SPEED);
+        p.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
 
         p.getInventory().remove(Material.STONE_SWORD);
         p.getInventory().remove(Material.IRON_SWORD);

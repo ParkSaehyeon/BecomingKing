@@ -4,9 +4,13 @@ import me.saehyeon.saehyeonlib.role.Role;
 import me.saehyeon.saehyeonlib.timer.Timer;
 import me.saehyeon.saehyeonlib.util.BukkitTaskf;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import rebert.saehyeon.becomingking.money.Money;
 
 public class GameTimer {
@@ -42,5 +46,31 @@ public class GameTimer {
                     p.sendActionBar("당신은 "+role.getPrefix().replace(" ","")+"§f입니다.");
             });
         },0,20*2);
+    }
+
+    public static void StartRevolutionTimer() {
+        BukkitTaskf.timer(() -> {
+            Bukkit.getOnlinePlayers().forEach(p -> {
+
+                Role role = Role.getByPlayer(p);
+
+                if(role != null && role.getName().equals("nobi")) {
+
+                    if (p.getInventory().contains(Material.DIAMOND_SWORD)) {
+
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,100000,2));
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,100000,3));
+
+                    } else {
+
+                        p.removePotionEffect(PotionEffectType.SPEED);
+                        p.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+
+                    }
+
+                }
+
+            });
+        },0,20);
     }
 }

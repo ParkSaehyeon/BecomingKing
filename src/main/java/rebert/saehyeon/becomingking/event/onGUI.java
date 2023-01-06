@@ -19,28 +19,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class onGUI implements Listener {
-    @EventHandler
-    void onTool(PlayerItemHeldEvent e) {
-        Player p = e.getPlayer();
-        Role role = Role.getByPlayer(p);
 
-        if(role != null && role.getName().equals("nobi")) {
-
-            if (p.getInventory().getItemInMainHand().getType() == Material.DIAMOND_SWORD) {
-
-                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,100000,2));
-                p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,100000,3));
-
-            } else {
-
-                p.removePotionEffect(PotionEffectType.SPEED);
-                p.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-
-            }
-
-        }
-
-    }
     @EventHandler
     void onGUIOpen(InventoryOpenEvent e) {
         BukkitTaskf.wait(() -> {
