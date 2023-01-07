@@ -176,7 +176,10 @@ public final class BecomingKing extends JavaPlugin {
             // 역할 랜덤 분배
             Role.applyRandomAll(Role.getByName("nobi"));
 
-            // 대사
+            // 대사 출처 밝히기
+            Bukkit.broadcastMessage("");
+            Bukkit.broadcastMessage("§c§l주의: 본 컨텐츠에서 사용된 모든 대사는 M으로부터 창시되었습니다.");
+            Bukkit.broadcastMessage("");
 
 
         });

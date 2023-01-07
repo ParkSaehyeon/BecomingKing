@@ -115,6 +115,10 @@ public class onDeath implements Listener {
                     message = "§7표영§f이 꼬리를 흔들며 헥헥됩니다."+HELP_MESSAGE;
                 }
 
+                else if(victimName.equals("suz_y") && attacker.getName().equals("dol_ta21")) {
+                    message = "§7뮤코§f가 §7수지§f를 질투합니다."+HELP_MESSAGE;
+                }
+
                 else if(victimName.equals("suz_y") && attacker.getName().equals("choigugu")) {
                     message = "§7표영§f이 살인충동을 느낍니다."+HELP_MESSAGE;
                 }
@@ -167,6 +171,10 @@ public class onDeath implements Listener {
 
                 else if(victimName.equals("suz_y") && attacker.getName().equals("choigugu")) {
                     message = "§7표영§f에게 한 줄기 희망이 생겼습니다."+HELP_MESSAGE;
+                }
+
+                else if(victimName.equals("suz_y") && attacker.getName().equals("dol_ta21")) {
+                    message = "그래도 §7뮤코§f는 화가 풀리지 않았습니다."+HELP_MESSAGE;
                 }
 
                 else if(victimName.equals("NamJae_") && attacker.getName().equals("choigugu")) {
