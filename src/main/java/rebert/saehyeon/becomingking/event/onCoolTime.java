@@ -21,7 +21,7 @@ public class onCoolTime implements SaehyeonLibListener {
             case "item.invisible":
 
                 // 만약 플레이어가 아직도 평민라면 아이템 투명 아이템 재 지급하기
-                if(role.getName().equals("pyungmin")) {
+                if(role != null && role.getName().equals("pyungmin")) {
 
                     p.getInventory().addItem(GameItem.get(GameItemType.PYUNGMIN_INVISIBLE));
 

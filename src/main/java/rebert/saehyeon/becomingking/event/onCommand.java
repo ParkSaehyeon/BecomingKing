@@ -36,15 +36,6 @@ public class onCommand implements CommandExecutor {
                 case "sword":
                     BecomingKing.regenRevolutionSword();
                     break;
-
-                case "revol-here":
-
-                    Location loc = ((Player) sender).getLocation().toBlockLocation();
-                    BecomingKing.RevolutionWarpLoc = loc;
-
-                    sender.sendMessage("혁명 준비 워프장소 설정: "+ Stringf.toLocationStr(loc));
-
-                    break;
             }
         }
         return false;

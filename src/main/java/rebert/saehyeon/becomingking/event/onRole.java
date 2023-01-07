@@ -1,6 +1,7 @@
 package rebert.saehyeon.becomingking.event;
 
 import me.saehyeon.saehyeonlib.main.SaehyeonLibListener;
+import me.saehyeon.saehyeonlib.region.Region;
 import me.saehyeon.saehyeonlib.role.Role;
 import me.saehyeon.saehyeonlib.role.event.RolePlayerAddEvent;
 import me.saehyeon.saehyeonlib.util.Itemf;
@@ -13,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import rebert.saehyeon.becomingking.BecomingKing;
 import rebert.saehyeon.becomingking.item.GameItem;
 import rebert.saehyeon.becomingking.item.GameItemType;
 
@@ -62,6 +64,20 @@ public class onRole implements SaehyeonLibListener {
 
                     // 노비들은 천민으로
                     new ArrayList<>( nobi.getPlayers() ).forEach(cheonmin::add);
+
+                    // 혁명 준비지역 안에 있는 노비가 아닌 플레이어들 모두 랜덤 TP
+                    Region.findByName("king-revolution").getPlayers().forEach(_p -> {
+                        Role _role = Role.getByPlayer(_p);
+
+                        if(!_role.getName().equals("nobi")) {
+
+                            // 노비가 아니면 추방
+                            BecomingKing.respawn(_p);
+                            _p.sendMessage("당신은 더 이상 §7노비가 아니기 때문에 §7혁명 준비 장소§f에서 퇴출되었습니다.");
+
+                        }
+
+                    });
 
                     Playerf.sendTitleAll("§l정권교체","모든 노비가 해방되었습니다.",0,40,15);
 

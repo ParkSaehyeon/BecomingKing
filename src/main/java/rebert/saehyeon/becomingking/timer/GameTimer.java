@@ -25,13 +25,17 @@ public class GameTimer {
         Timer.StartTimer("king",bossBar,1800);
     }
 
-    public static void StartYangbanTimer() {
+    public static void StartRoleTimer() {
         Role yangban = Role.getByName("yangban");
+        Role sunbi = Role.getByName("sunbi");
 
         BukkitTaskf.timer(() -> {
 
             // 양반들한테 돈 주기
             yangban.getPlayers().forEach(p -> Money.add(p,5));
+
+            // 선비한테 신속주기
+            sunbi.getPlayers().forEach(p -> p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10000,1,false,false)));
 
         },0,20*(60*2+30));
     }

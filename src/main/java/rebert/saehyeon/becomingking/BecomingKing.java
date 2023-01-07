@@ -29,37 +29,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class BecomingKing extends JavaPlugin {
 
     public static boolean isTimeStop = false;
-    public static World WORLD = Bukkit.getWorld("world");
-    public static Location WaitingRoomLoc = new Location(WORLD,-65,81,207);
 
-    // 혁명 준비장소 태어나는 위치
-    public static Location RevolutionLoc = new Location(WORLD, 15,66, 369);
-
-    // 혁명 준비장소에서 다시 돌아가는 거
-    public static Location RevolutionBackLoc = new Location(WORLD, 14,66,373);
-
-    // 혁명 준비장소로 이동하는 위치
-    public static Location RevolutionWarpLoc = null;
-    public static Location RevolutionSwordChestLoc = new Location(WORLD, 23,56,421);
-
-    public static ArrayList<Location> SpawnLoc = new ArrayList<>(Arrays.asList(
-        new Location(WORLD,-36,64,201),
-        new Location(WORLD,59,65,214),
-        new Location(WORLD,72,66,168),
-        new Location(WORLD,34,66,136),
-        new Location(WORLD,19,71,76),
-        new Location(WORLD,-35,66,76),
-        new Location(WORLD,-76,67,91),
-        new Location(WORLD,-74,66,118),
-        new Location(WORLD,-70,64,141),
-        new Location(WORLD,-75,64,199),
-        new Location(WORLD,-82,64,251),
-        new Location(WORLD,-15,65,263),
-        new Location(WORLD,21,64,263),
-        new Location(WORLD,81,67,291),
-        new Location(WORLD,183,64,295),
-        new Location(WORLD,199,64,241)
-    ));
+    public static ArrayList<Location> SpawnLoc = new ArrayList<>();
 
     public static BecomingKing ins;
 
@@ -119,7 +90,7 @@ public final class BecomingKing extends JavaPlugin {
         shop.register();
 
         // 양반한테 옆전 주는 타이머 시작
-        GameTimer.StartYangbanTimer();
+        GameTimer.StartRoleTimer();
 
         // 역할 엑션바 띄우는 타이머 시작
         GameTimer.StartRoleActionbarTimer();
@@ -135,6 +106,28 @@ public final class BecomingKing extends JavaPlugin {
     }
 
     public static void Start() {
+
+        World world = Bukkit.getWorld("world");
+
+        // 스폰좌표 설정
+        SpawnLoc = new ArrayList<>(Arrays.asList(
+                new Location(world,-36,64,201),
+                new Location(world,59,65,214),
+                new Location(world,72,66,168),
+                new Location(world,34,66,136),
+                new Location(world,19,71,76),
+                new Location(world,-35,66,76),
+                new Location(world,-76,67,91),
+                new Location(world,-74,66,118),
+                new Location(world,-70,64,141),
+                new Location(world,-75,64,199),
+                new Location(world,-82,64,251),
+                new Location(world,-15,65,263),
+                new Location(world,21,64,263),
+                new Location(world,81,67,291),
+                new Location(world,183,64,295),
+                new Location(world,199,64,241)
+        ));
 
         Timer.countDown(3, () -> {
 
@@ -316,7 +309,7 @@ public final class BecomingKing extends JavaPlugin {
 
         player.sendMessage("당신은 §730초§f동안 §7신분 교체의 방§f에 갇히게 됩니다.");
 
-        player.teleport(WaitingRoomLoc);
+        player.teleport( new Location(player.getWorld(),-65,81,207) );
 
         BukkitTaskf.wait(() -> respawn(player),20*30);
     }
@@ -329,19 +322,19 @@ public final class BecomingKing extends JavaPlugin {
             return;
 
         if(player.getLocation().clone().add(0,-1,0).getBlock().getType() == Material.GOLD_BLOCK) {
-            player.teleport(RevolutionLoc);
+            player.teleport( new Location(player.getWorld(), 15,66, 369) );
             player.sendTitle("","§c§l혁명 준비 장소§f에 도착했습니다.");
         }
 
-        if(Locationf.equal(RevolutionBackLoc,player.getLocation().toBlockLocation())) {
-            player.teleport(new Location(WORLD, 58,93,340));
+        if(Locationf.equal( new Location(player.getWorld(), 14,66,373) ,player.getLocation().toBlockLocation())) {
+            player.teleport( new Location(player.getWorld(), 58,93,340) );
             player.sendTitle("","§c§l혁명 준비 장소§f에서 나왔습니다.");
         }
     }
 
     public static void regenRevolutionSword() {
 
-        Chest chest = (Chest)RevolutionSwordChestLoc.getBlock().getState();
+        Chest chest = (Chest)( new Location(Bukkit.getWorld("world"), 23,56,421) ).getBlock().getState();
         chest.getInventory().clear();
         chest.getInventory().setItem(13,GameItem.get(GameItemType.REVOLUTION_SWORD));
 
