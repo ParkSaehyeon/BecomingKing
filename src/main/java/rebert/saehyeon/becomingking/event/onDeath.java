@@ -47,6 +47,9 @@ public class onDeath implements Listener {
             return;
         }
 
+        String victimName = victim.getName();
+        String attackerName = attacker.getName();
+
         // 공격자가 있음
         Role attackerRole   = Role.getByPlayer(attacker);
         Role victimRole     = Role.getByPlayer(victim);
@@ -81,22 +84,43 @@ public class onDeath implements Listener {
                 Role.getByName("nobi").add(victim);
 
                 String message = "";
+                String HELP_MESSAGE = " (§7"+victimName+"§f(이)가 §7"+attackerName+"§f의 노비가 되었습니다.)";
 
                 // 공격자: 망치님, 피해자: 표영님
-                if(victim.getName().equals("Pyoyoung") && attacker.getName().equals("_H_A_M_M_E_R_")) {
-                    message = "§7망치§f가 §7표영§f을 가졌습니다.";
+                if(victimName.equals("Pyoyoung") && attacker.getName().equals("_H_A_M_M_E_R_")) {
+                    message = "§7망치§f가 §7표영§f의 순결을 빼앗아갔습니다."+HELP_MESSAGE;
                 }
 
-                else if(victim.getName().equals("Myuko0520") && attacker.getName().equals("dol_ta21")) {
-                    message = "§7돌타§f가 §7뮤코§f와 백년가약을 맺었습니다.";
+                else if(victimName.equals("_H_A_M_M_E_R_") && attacker.getName().equals("Pyoyoung")) {
+                    message = "§7표영§f아 개겨?"+HELP_MESSAGE;
                 }
 
-                else if(victim.getName().equals("choigugu") && attacker.getName().equals("NamJae_")) {
-                    message = "공격수인 §7남재§f가 수비수인 §7최구구§f를 이겼습니다.";
+                else if(victimName.equals("Myuko0520") && attacker.getName().equals("dol_ta21")) {
+                    message = "§7돌타§f가 §7뮤코§f와 백년가약을 맺었습니다."+HELP_MESSAGE;
+                }
+
+                else if(victimName.equals("choigugu") && attacker.getName().equals("NamJae_")) {
+                    message = "§7남재§f에 의해 §7최구구§f가 단단해졌습니다."+HELP_MESSAGE;
+                }
+
+                else if(victimName.equals("NamJae_") && attacker.getName().equals("choigugu")) {
+                    message = "§7최구구§f와 §7남재§f간의 공수가 바뀌었습니다."+HELP_MESSAGE;
+                }
+
+                else if(victimName.equals("suz_y") && attacker.getName().equals("Pyoyoung")) {
+                    message = "§7표영§f의 인생에 빨간줄이 그어집니다."+HELP_MESSAGE;
+                }
+
+                else if(victimName.equals("Pyoyoung") && attacker.getName().equals("suz_y")) {
+                    message = "§7표영§f이 꼬리를 흔들며 헥헥됩니다."+HELP_MESSAGE;
+                }
+
+                else if(victimName.equals("suz_y") && attacker.getName().equals("choigugu")) {
+                    message = "§7표영§f이 살인충동을 느낍니다."+HELP_MESSAGE;
                 }
 
                 else {
-                    message = "§7"+attacker.getName()+"§f(이)가 §7"+victim.getName()+"§f(을)를 자신의 노비로 만들었습니다!";
+                    message = "§7"+attacker.getName()+"§f(이)가 §7"+victimName+"§f(을)를 자신의 노비로 만들었습니다!";
                 }
 
                 PlayerState.set(victim, "waitingRoomRespawn", false);
@@ -119,24 +143,39 @@ public class onDeath implements Listener {
                 BecomingKing.out(victim);
 
                 String message = "";
+                String HELP_MESSAGE = " (§7"+victimName+"§f(이)가 탈락했습니다.)";
 
-                if(victim.getName().equals("Pyoyoung") && attacker.getName().equals("_H_A_M_M_E_R_")) {
-                    message = "마침내 §7표영§f은 §7망치§f로부터 벗어났습니다.";
+                if(victimName.equals("Pyoyoung") && attackerName.equals("_H_A_M_M_E_R_")) {
+                    message = "§7표영§f은 죽어서도 §7망치§f에게 영혼으로써의 첫 순결까지 빼앗겼습니다."+HELP_MESSAGE;
                 }
 
-                else if(victim.getName().equals("Myuko0520") && attacker.getName().equals("dol_ta21")) {
-                    message = "§7돌타§f가 §7뮤코§f와 이혼하기로 결정했습니다.";
+                else if(victimName.equals("_H_A_M_M_E_R_") && attacker.getName().equals("Pyoyoung")) {
+                    message = "§7망치§f왈, 넌 좀 있다 보자."+HELP_MESSAGE;
                 }
 
-                else if(victim.getName().equals("choigugu") && attacker.getName().equals("NamJae_")) {
-                    message = "공격수인 §7남재§f가 수비수인 §7최구구§f를 먹었습니다.";
+                else if(victimName.equals("Myuko0520") && attackerName.equals("dol_ta21")) {
+                    message = "§7돌타§f가 §7뮤코§f와 이혼하기로 결정했습니다."+HELP_MESSAGE;
+                }
+
+                else if(victimName.equals("choigugu") && attackerName.equals("NamJae_")) {
+                    message = "거사가 끝나고 §7최구구§f가 아쉬워합니다."+HELP_MESSAGE;
+                }
+
+                else if(victimName.equals("suz_y") && attacker.getName().equals("Pyoyoung")) {
+                    message = "§7표영§f이 교도소에 들어갔습니다."+HELP_MESSAGE;
+                }
+
+                else if(victimName.equals("suz_y") && attacker.getName().equals("choigugu")) {
+                    message = "§7표영§f에게 한 줄기 희망이 생겼습니다."+HELP_MESSAGE;
+                }
+
+                else if(victimName.equals("NamJae_") && attacker.getName().equals("choigugu")) {
+                    message = "§7남재§f가 §7최구구§f에 의해 수비수로 써의 눈이 틔었습니다."+HELP_MESSAGE;
                 }
 
                 else {
-                    message = "§7"+attacker.getName()+"§f(이)가 §7"+victim.getName()+"§f(을)를 탈락시켰습니다!";
+                    message = "§7"+attackerName+"§f(이)가 §7"+victimName+"§f(을)를 탈락시켰습니다!";
                 }
-
-                message += " (§7"+victim.getName()+"§f(이)가 탈락했습니다.)";
 
                 e.setDeathMessage(message);
 
@@ -165,14 +204,14 @@ public class onDeath implements Listener {
 
             attacker.sendMessage("§c당신은 사람을 잘 못 죽였기 때문에 10냥을 잃었습니다.");
 
-            e.setDeathMessage("§7"+attacker.getName()+"§f(이)가 §7"+victim.getName()+"§f(을)를 죽였습니다.");
+            e.setDeathMessage("§7"+attacker.getName()+"§f(이)가 §7"+victimName+"§f(을)를 죽였습니다.");
 
         } else {
 
             // 10냥이 없음
             BecomingKing.out(attacker);
 
-            e.setDeathMessage("§7"+attacker.getName()+"§f(이)가 §7"+victim.getName()+"§f(을)를 잘 못 죽였으나 벌금을 낼 수 없어, 탈락했습니다.");
+            e.setDeathMessage("§7"+attacker.getName()+"§f(이)가 §7"+victimName+"§f(을)를 잘 못 죽였으나 벌금을 낼 수 없어, 탈락했습니다.");
 
         }
 
